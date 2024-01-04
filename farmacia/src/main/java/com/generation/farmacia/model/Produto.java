@@ -22,11 +22,10 @@ public class Produto {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank(message = "O atributo nome é obrigatório")
+	@NotBlank(message = "O atributo produto é obrigatório")
 	@Size(min = 2, max = 15, message = "O atributo nome do produto deve conter no minimo 2 caracteres e no máximo 15")
 	private String produto;
 
-	@NotBlank
 	@DecimalMin(value = "0.0", inclusive = false, message = "O preço deve ser maior que zero")
 	@Digits(integer = 5, fraction = 2)
 	private BigDecimal preco;
@@ -43,12 +42,12 @@ public class Produto {
 		this.id = id;
 	}
 
-	public String getNomeProduto() {
+	public String getProduto() {
 		return produto;
 	}
 
-	public void setNomeProduto(String nomeProduto) {
-		this.produto = nomeProduto;
+	public void setProduto(String produto) {
+		this.produto = produto;
 	}
 
 	public BigDecimal getPreco() {

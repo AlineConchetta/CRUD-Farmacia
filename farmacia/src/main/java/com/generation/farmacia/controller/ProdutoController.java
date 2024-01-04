@@ -37,39 +37,42 @@ public class ProdutoController {
 
 	}
 
-@GetMapping("/{id}")
-public ResponseEntity<Produto> getById(@PathVariable Long id) {
-	return produtoRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
-			.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-}
+	@GetMapping("/{id}")
+	public ResponseEntity<Produto> getById(@PathVariable Long id) {
+		return produtoRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	}
 
-@GetMapping("/nome/{nome}")
-public ResponseEntity<List<Produto>> getByTema(@PathVariable String nomeProduto) {
-	return ResponseEntity.ok(produtoRepository.findAllByProdutoContainingIgnoreCase(nomeProduto));
-}
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<List<Produto>> getByCategoria(@PathVariable String produto) {
+		return ResponseEntity.ok(produtoRepository
+				.findAllByProdutoContainingIgnoreCase(produto));
+		
+	}
 
-@PostMapping
-public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
-	return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
-}
+	@PostMapping
+	public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
+	}
 
-@PutMapping
-public ResponseEntity<Produto> put(@Valid @RequestBody Produto produto) {
+	@PutMapping
+	public ResponseEntity<Produto> put(@Valid @RequestBody Produto produto) {
 
-	if (produtoRepository.existsById(produto.getId()))
-		return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
-	else
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-}
+		if (produtoRepository.existsById(produto.getId()))
+			return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
+		else
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+	}
 
-@DeleteMapping("/{id}")
-@ResponseStatus(HttpStatus.NO_CONTENT)
-public void delete(@PathVariable Long id) {
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Long id) {
 
-	Optional<Produto> testa = produtoRepository.findById(id);
-	if (testa.isEmpty())
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		Optional<Produto> testa = produtoRepository.findById(id);
+		if (testa.isEmpty())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-	produtoRepository.deleteById(id);;
-}
+		produtoRepository.deleteById(id);
+		;
+	}
 }
