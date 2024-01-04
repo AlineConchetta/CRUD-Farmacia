@@ -1,6 +1,7 @@
 package com.generation.farmacia.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.server.ResponseStatusException;
 import com.generation.farmacia.model.Produto;
 import com.generation.farmacia.repository.ProdutoRepository;
 
@@ -37,26 +38,26 @@ public class ProdutoController {
 	}
 
 @GetMapping("/{id}")
-public ResponseEntity<Categoria> getById(@PathVariable Long id) {
-	return categoriaRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
+public ResponseEntity<Produto> getById(@PathVariable Long id) {
+	return produtoRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
 			.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 }
 
-@GetMapping("/tema/{tema}")
-public ResponseEntity<List<Categoria>> getByTema(@PathVariable String tema) {
-	return ResponseEntity.ok(categoriaRepository.findAllByTemaContainingIgnoreCase(tema));
+@GetMapping("/nome/{nome}")
+public ResponseEntity<List<Produto>> getByTema(@PathVariable String nomeProduto) {
+	return ResponseEntity.ok(produtoRepository.findAllByProdutoContainingIgnoreCase(nomeProduto));
 }
 
 @PostMapping
-public ResponseEntity<Categoria> post(@Valid @RequestBody Categoria categoria) {
-	return ResponseEntity.status(HttpStatus.CREATED).body(categoriaRepository.save(cartegoria));
+public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
+	return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
 }
 
 @PutMapping
-public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria) {
+public ResponseEntity<Produto> put(@Valid @RequestBody Produto produto) {
 
-	if (categoriaRepository.existsById(categoria.getId()))
-		return ResponseEntity.status(HttpStatus.OK).body(categoriaRepository.save(categoria));
+	if (produtoRepository.existsById(produto.getId()))
+		return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
 	else
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 }
@@ -65,9 +66,10 @@ public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria) {
 @ResponseStatus(HttpStatus.NO_CONTENT)
 public void delete(@PathVariable Long id) {
 
-	if (categoriaRepository.existsById(id))
-		categoriaRepository.deleteById(id);
-	else
+	Optional<Produto> testa = produtoRepository.findById(id);
+	if (testa.isEmpty())
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+	produtoRepository.deleteById(id);;
 }
 }
