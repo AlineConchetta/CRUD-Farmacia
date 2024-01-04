@@ -1,4 +1,4 @@
-package com.generation.blogpessoal.model;
+package com.generation.farmacia.model;
 
 import java.math.BigDecimal;
 
@@ -28,6 +28,8 @@ public class Produto {
 	@DecimalMin(value = "0.0", inclusive = false, message = "O preço deve ser maior que zero")
 	@Digits(integer = 5, fraction = 2)
 	private BigDecimal preco;
+	
+	
 
 	public Long getId() {
 		return id;
